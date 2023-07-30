@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: cola-deployment
+  name: cola-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cola-nginx
+  template:
+    metadata:
+      labels:
+        app: cola-nginx
+    spec:
+      containers:
+      - image: nginx:1.11.5
+        name: cola
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        volumeMounts:
+        - name: cola-conf
+          mountPath: /etc/nginx/conf.d
+      volumes:
+        - name: cola-conf
+          configMap:
+            name: cola-conf
